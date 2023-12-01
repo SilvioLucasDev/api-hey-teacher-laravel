@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "prepare": "husky install"
+    },
+    "devDependencies": {
+        "husky": "^8.0.3"
+    }
+}

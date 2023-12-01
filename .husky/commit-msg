@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+#cores
+NC='\033[0m'
+BBlue='\033[1;34m'
+BRed='\033[1;31m'
+
+REGEX_ISSUE_ID="[a-zA-Z0-9,\.\_\-]+-[0-9]+"
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+ISSUE_ID=$(echo "$BRANCH_NAME" | grep -o -E "$REGEX_ISSUE_ID")
+COMMIT_MESSAGE=$(cat "$1")
+
+if [ -z "$ISSUE_ID" ]; then
+  echo -e "${BRed}ERRO: Nome da branch inválido. O nome deve incluir o id da issue. (por exemplo, PROJ-123)${NC}"
+  exit 1
+fi
+
+# Validar o padrão da mensagem de commit
+if [[ $COMMIT_MESSAGE == $ISSUE_ID* ]]; then
+  exit 0
+fi
+
+# Verificar se a mensagem de commit contém as tags semânticas com dois pontos
+SEMANTIC_TAGS=("docs:" "feat:" "fix:" "perf:" "test:" "refactor:" "style:" "build:" "ci:" "chore:" "revert:" "Merge")
+
+for TAG in "${SEMANTIC_TAGS[@]}"; do
+  if [[ $COMMIT_MESSAGE == *"$TAG"* ]]; then
+
+    echo "$COMMIT_MESSAGE $ISSUE_ID" >$1
+    exit 0
+  fi
+done
+
+echo -e "${BRed}ERRO: A mensagem de commit não contém nenhuma das tags semânticas com os dois pontos (docs:, feat:, fix:, perf:, test:, refactor:, style:, build:, ci:, chore:, revert:)${NC}"
+exit 1
