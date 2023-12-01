@@ -16,7 +16,7 @@ class StoreController extends Controller
     public function __invoke(StoreRequest $request): JsonResource
     {
         $question = Question::create([
-            'user_id'  => auth()->user()->id,
+            'user_id'  => user()->id,
             'status'   => 'draft',
             'question' => $request->question,
         ]);
