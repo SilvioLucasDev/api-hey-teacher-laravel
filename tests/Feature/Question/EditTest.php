@@ -3,7 +3,7 @@
 use App\Models\{Question, User};
 use Laravel\Sanctum\Sanctum;
 
-use function Pest\Laravel\{assertDatabaseHas, postJson, putJson};
+use function Pest\Laravel\{assertDatabaseHas, putJson};
 
 test('should be able to update a question', function () {
     $user     = User::factory()->create();
@@ -97,5 +97,25 @@ describe('Validation rules', function () {
             'question' => 'Any Question ?',
         ])
         ->assertOk();
+    });
+});
+
+describe('security', function () {
+    it('only the person who create the question can update the same question', function () {
+        $userOne = User::factory()->create();
+        $userTwo = User::factory()->create();
+
+        $question = Question::factory()->create(['user_id' => $userOne->id]);
+
+        Sanctum::actingAs($userTwo);
+
+        putJson(route('questions.update', $question), [
+            'question' => 'Updating Question ?',
+        ])->assertForbidden();
+
+        assertDatabaseHas('questions', [
+            'id'       => $question->id,
+            'question' => $question->question,
+        ]);
     });
 });
