@@ -35,4 +35,67 @@ describe('Validation rules', function () {
             'question' => __('validation.required', ['attribute' => 'question']),
         ]);
     });
+
+    test('question::ending with question mark (?)', function () {
+        $user     = User::factory()->create();
+        $question = Question::factory()->create(['user_id' => $user->id]);
+
+        Sanctum::actingAs($user);
+
+        putJson(route('questions.update', $question), [
+            'question' => 'Question without a question mark',
+        ])
+        ->assertJsonValidationErrors([
+            'question' => 'The question should end with question mark (?).',
+        ]);
+    });
+
+    test('question::min:10', function () {
+        $user     = User::factory()->create();
+        $question = Question::factory()->create(['user_id' => $user->id]);
+
+        Sanctum::actingAs($user);
+
+        putJson(route('questions.update', $question), [
+            'question' => 'Any ?',
+        ])
+        ->assertJsonValidationErrors([
+            'question' => __('validation.min.string', ['min' => 10, 'attribute' => 'question']),
+        ]);
+    });
+
+    test('question::unique', function () {
+        $user = User::factory()->create();
+        Question::factory()->create([
+            'user_id'  => $user->id,
+            'question' => 'Any Question ?',
+            'status'   => 'draft',
+        ]);
+        $question = Question::factory()->create(['user_id' => $user->id]);
+
+        Sanctum::actingAs($user);
+
+        putJson(route('questions.update', $question), [
+            'question' => 'Any Question ?',
+        ])
+        ->assertJsonValidationErrors([
+            'question' => __('validation.unique', ['attribute' => 'question']),
+        ]);
+    });
+
+    test('question::unique - should be unique only if id is different', function () {
+        $user     = User::factory()->create();
+        $question = Question::factory()->create([
+            'user_id'  => $user->id,
+            'question' => 'Any Question ?',
+            'status'   => 'draft',
+        ]);
+
+        Sanctum::actingAs($user);
+
+        putJson(route('questions.update', $question), [
+            'question' => 'Any Question ?',
+        ])
+        ->assertOk();
+    });
 });
