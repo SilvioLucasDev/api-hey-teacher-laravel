@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\Question;
 
-use App\Rules\WithQuestionMarkRule;
+use App\Models\Question;
+use App\Rules\{OnlyAsDraft, WithQuestionMarkRule};
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -18,7 +19,7 @@ class UpdateQuestion extends FormRequest
     public function authorize(): bool
     {
         /** @var Question $question */
-        $question = $this->route()->question;
+        $question = $this->route()->question; // @phpstan-ignore-line
 
         return Gate::allows('update', $question);
     }
@@ -30,12 +31,16 @@ class UpdateQuestion extends FormRequest
      */
     public function rules(): array
     {
+        /** @var Question $question */
+        $question = $this->route()->question; // @phpstan-ignore-line
+
         return [
             'question' => [
                 'required',
-                new WithQuestionMarkRule(),
                 'min:10',
-                Rule::unique('questions')->ignore($this->route()->question->id),
+                new WithQuestionMarkRule(),
+                new OnlyAsDraft($question),
+                Rule::unique('questions')->ignoreModel($question),
             ],
         ];
     }

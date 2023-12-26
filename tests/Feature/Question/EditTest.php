@@ -98,6 +98,31 @@ describe('Validation rules', function () {
         ])
         ->assertOk();
     });
+
+    test('question::should be able to edit question only if the status is in _draft_', function () {
+        $user     = User::factory()->create();
+        $question = Question::factory()->create([
+            'user_id'  => $user->id,
+            'question' => 'Any Question ?',
+            'status'   => 'published',
+        ]);
+
+        Sanctum::actingAs($user);
+
+        putJson(route('questions.update', $question), [
+            'question' => 'Updating Question ?',
+        ])
+        ->assertJsonValidationErrors([
+            'question' => 'The question should be a draft to be able to edit',
+        ]);
+
+        assertDatabaseHas('questions', [
+            'user_id'  => $user->id,
+            'question' => 'Any Question ?',
+            'status'   => 'published',
+        ]);
+    });
+
 });
 
 describe('security', function () {
