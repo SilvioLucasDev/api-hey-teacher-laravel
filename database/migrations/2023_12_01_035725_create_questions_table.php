@@ -16,6 +16,7 @@ return new class () extends Migration {
             $table->foreignIdFor(User::class)->references('id')->on('users');
             $table->text('question');
             $table->string('status');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index('user_id');
