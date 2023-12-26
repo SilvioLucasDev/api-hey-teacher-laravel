@@ -21,3 +21,18 @@ test('should be able to update a question', function () {
         'question' => 'Updating Question ?',
     ]);
 });
+
+describe('Validation rules', function () {
+    test('question::required', function () {
+        $user     = User::factory()->create();
+        $question = Question::factory()->create(['user_id' => $user->id]);
+
+        Sanctum::actingAs($user);
+
+        putJson(route('questions.update', $question), [
+            'question' => '',
+        ])->assertJsonValidationErrors([
+            'question' => __('validation.required', ['attribute' => 'question']),
+        ]);
+    });
+});
