@@ -117,5 +117,4 @@ test('after creating we should return a status 201 with the created question', f
             'updated_at' => $question->updated_at->format('Y-m-d h:i:s'),
         ],
     ]);
-
 });
