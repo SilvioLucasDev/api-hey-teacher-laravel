@@ -31,7 +31,7 @@ class MyController extends Controller
                 fn (Builder $query) => $query->onlyTrashed(),
                 fn (Builder $query) => $query->where('status', $status)
             )
-            ->get();
+            ->paginate();
 
         return QuestionResource::collection($questions);
     }
