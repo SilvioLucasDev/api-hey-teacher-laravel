@@ -5,7 +5,7 @@ use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\getJson;
 
-test('should be able to list only published questions', function () {
+it('should be able to list only published questions', function () {
     $user              = User::factory()->create();
     $questionPublished = Question::factory()->for($user)->published()->create();
     $questionDraft     = Question::factory()->for($user)->draft()->create();

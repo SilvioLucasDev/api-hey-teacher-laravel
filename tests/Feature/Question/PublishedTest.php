@@ -5,7 +5,7 @@ use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\{assertDatabaseHas, putJson};
 
-test('should be able to publish a question', function () {
+it('should be able to publish a question', function () {
     $user     = User::factory()->create();
     $question = Question::factory()->for($user)->create(['status' => 'draft']);
 
@@ -17,7 +17,7 @@ test('should be able to publish a question', function () {
     assertDatabaseHas('questions', ['id' => $question->id, 'status' => 'published']);
 });
 
-test('should allow that only the creator can publish', function () {
+it('should allow that only the creator can publish', function () {
     $userOne  = User::factory()->create();
     $userTwo  = User::factory()->create();
     $question = Question::factory()->for($userOne)->create();
@@ -30,7 +30,7 @@ test('should allow that only the creator can publish', function () {
     assertDatabaseHas('questions', ['id' => $question->id, 'status' => 'draft']);
 });
 
-test('should only publish when the question is on status draft', function () {
+it('should only publish when the question is on status draft', function () {
     $userOne  = User::factory()->create();
     $userTwo  = User::factory()->create();
     $question = Question::factory()->for($userOne)->create(['status' => 'published']);

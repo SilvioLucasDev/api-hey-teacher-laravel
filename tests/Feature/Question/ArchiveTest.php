@@ -5,7 +5,7 @@ use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\{assertNotSoftDeleted, assertSoftDeleted, deleteJson};
 
-test('should be able to archive a question', function () {
+it('should be able to archive a question', function () {
     $user     = User::factory()->create();
     $question = Question::factory()->for($user)->create();
 
@@ -17,7 +17,7 @@ test('should be able to archive a question', function () {
     assertSoftDeleted('questions', ['id' => $question->id]);
 });
 
-test('should allow that only the creator can archive', function () {
+it('should allow that only the creator can archive', function () {
     $userOne  = User::factory()->create();
     $userTwo  = User::factory()->create();
     $question = Question::factory()->for($userOne)->create();

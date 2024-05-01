@@ -5,7 +5,7 @@ use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\{assertDatabaseHas, postJson};
 
-test('should be able to store a new question', function () {
+it('should be able to store a new question', function () {
     $user = User::factory()->create();
 
     Sanctum::actingAs($user);
@@ -20,7 +20,7 @@ test('should be able to store a new question', function () {
     ]);
 });
 
-test('with the creation of the question, we need to make sure that it creates with status _draft_', function () {
+it('with the creation of the question, we need to make sure that it creates with status _draft_', function () {
     $user = User::factory()->create();
 
     Sanctum::actingAs($user);
