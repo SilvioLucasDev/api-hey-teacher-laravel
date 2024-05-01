@@ -14,9 +14,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::post('register', Auth\RegisterController::class)->name('register');
-Route::post('login', Auth\LoginController::class)->name('login');
+Route::middleware(['guest', 'web'])->group(function () {
+    Route::post('register', Auth\RegisterController::class)->name('register');
+    Route::post('login', Auth\LoginController::class)->name('login');
+});
 
 Route::middleware('auth:sanctum')->group(function () {
 
