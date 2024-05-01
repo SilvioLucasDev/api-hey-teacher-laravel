@@ -8,7 +8,7 @@ use App\Models\Question;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Facades\{Auth, Validator};
+use Illuminate\Support\Facades\Validator;
 
 class MyController extends Controller
 {
@@ -25,7 +25,7 @@ class MyController extends Controller
         );
 
         $questions = Question::query()
-            ->where('user_id', Auth::id())
+            ->where('user_id', user()->id)
             ->when(
                 $status == 'archived',
                 fn (Builder $query) => $query->onlyTrashed(),
