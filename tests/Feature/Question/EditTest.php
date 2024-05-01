@@ -146,7 +146,7 @@ describe('security', function () {
 });
 
 test('after creating we should return a status 200 with the created question', function () {
-    $user = User::factory()->create();
+    $user     = User::factory()->create();
     $question = Question::factory()->create(['user_id' => $user->id]);
 
     Sanctum::actingAs($user);
