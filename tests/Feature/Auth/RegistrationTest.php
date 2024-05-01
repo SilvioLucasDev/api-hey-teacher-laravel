@@ -3,7 +3,7 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-use function Pest\Laravel\{assertDatabaseHas, postJson};
+use function Pest\Laravel\{assertAuthenticatedAs, assertDatabaseHas, postJson};
 use function PHPUnit\Framework\assertTrue;
 
 test('should be able to register in the application', function () {
@@ -74,28 +74,13 @@ describe('Validation rules', function () {
     ]);
 });
 
-// test('after creating we should return a status 201 with the created question', function () {
-//     $user = User::factory()->create();
+test('should log the new user in the system', function () {
+    postJson(route('register', [
+        'name'     => 'Any User',
+        'email'    => 'any@email.com',
+        'password' => 'password',
+    ]))->assertSuccessful();
 
-//     Sanctum::actingAs($user);
-
-//     $response = postJson(route('questions.store', [
-//         'question' => 'Any Question ?',
-//     ]))->assertCreated();
-
-//     $question = Question::latest()->first();
-
-//     $response->assertJson([
-//         'data' => [
-//             'id'         => $question->id,
-//             'question'   => $question->question,
-//             'status'     => $question->status,
-//             'created_by' => [
-//                 'id'   => $user->id,
-//                 'name' => $user->name,
-//             ],
-//             'created_at' => $question->created_at->format('Y-m-d h:i:s'),
-//             'updated_at' => $question->updated_at->format('Y-m-d h:i:s'),
-//         ],
-//     ]);
-// });
+    $user = User::first();
+    assertAuthenticatedAs($user);
+});
