@@ -8,7 +8,8 @@ use function Pest\Laravel\getJson;
 it('should be able to list only published questions', function () {
     $user              = User::factory()->create();
     $questionPublished = Question::factory()->for($user)->published()->create();
-    $questionDraft     = Question::factory()->for($user)->draft()->create();
+    $questionPublished->votes()->create(['user_id' => $user->id, 'like' => true]);
+    $questionDraft = Question::factory()->for($user)->draft()->create();
 
     Sanctum::actingAs($user);
 
@@ -23,8 +24,10 @@ it('should be able to list only published questions', function () {
             'id'   => $user->id,
             'name' => $user->name,
         ],
-        'created_at' => $questionPublished->created_at->format('Y-m-d h:i:s'),
-        'updated_at' => $questionPublished->updated_at->format('Y-m-d h:i:s'),
+        'votes_sum_like'   => 1,
+        'votes_sum_unlike' => 0,
+        'created_at'       => $questionPublished->created_at->format('Y-m-d h:i:s'),
+        'updated_at'       => $questionPublished->updated_at->format('Y-m-d h:i:s'),
     ])->assertJsonMissing([
         'question' => $questionDraft->question,
     ]);
