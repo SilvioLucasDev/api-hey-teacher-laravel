@@ -8,9 +8,10 @@ use function PHPUnit\Framework\assertTrue;
 
 test('should be able to register in the application', function () {
     postJson(route('register', [
-        'name'     => 'Any User',
-        'email'    => 'any@email.com',
-        'password' => 'password',
+        'name'               => 'Any User',
+        'email'              => 'any@email.com',
+        'email_confirmation' => 'any@email.com',
+        'password'           => 'password',
     ]))->assertSuccessful();
 
     assertDatabaseHas('users', [
@@ -41,6 +42,10 @@ describe('Validation rules', function () {
     ]);
 
     test('email', function ($rule, $value, $meta = []) {
+        if ($rule == 'unique') {
+            User::factory()->create(['email' => $value]);
+        }
+
         postJson(route('register', [
             'email' => $value,
         ]))->assertJsonValidationErrors([
@@ -51,10 +56,12 @@ describe('Validation rules', function () {
         ]);
 
     })->with([
-        'required' => ['required', ''],
-        'min:3'    => ['min', 'AB', ['min' => 3]],
-        'max:255'  => ['max', str_repeat('*', 256), ['max' => 255]],
-        'email'    => ['email', 'not-email'],
+        'required'  => ['required', ''],
+        'min:3'     => ['min', 'AB', ['min' => 3]],
+        'max:255'   => ['max', str_repeat('*', 256), ['max' => 255]],
+        'email'     => ['email', 'not-email'],
+        'unique'    => ['unique', 'any@email.com'],
+        'confirmed' => ['confirmed', 'any@email.com'],
     ]);
 
     test('password', function ($rule, $value, $meta = []) {
@@ -76,9 +83,10 @@ describe('Validation rules', function () {
 
 test('should log the new user in the system', function () {
     postJson(route('register', [
-        'name'     => 'Any User',
-        'email'    => 'any@email.com',
-        'password' => 'password',
+        'name'               => 'Any User',
+        'email'              => 'any@email.com',
+        'email_confirmation' => 'any@email.com',
+        'password'           => 'password',
     ]))->assertSuccessful();
 
     $user = User::first();
