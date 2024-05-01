@@ -31,4 +31,9 @@ class QuestionFactory extends Factory
     {
         return $this->state(fn (array $attributes) => ['status' => 'draft']);
     }
+
+    public function archive(): self
+    {
+        return $this->state(fn (array $attributes) => ['deleted_at' => fake()->dateTime()]);
+    }
 }
