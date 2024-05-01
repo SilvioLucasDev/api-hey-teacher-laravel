@@ -5,7 +5,7 @@ use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\{assertNotSoftDeleted, assertSoftDeleted, putJson};
 
-test('should be able to restore a question', function () {
+it('should be able to restore a question', function () {
     $user     = User::factory()->create();
     $question = Question::factory()->for($user)->create();
 
@@ -20,7 +20,7 @@ test('should be able to restore a question', function () {
     assertNotSoftDeleted('questions', ['id' => $question->id]);
 });
 
-test('should allow that only the creator can restore', function () {
+it('should allow that only the creator can restore', function () {
     $userOne  = User::factory()->create();
     $userTwo  = User::factory()->create();
     $question = Question::factory()->for($userOne)->create();
@@ -34,7 +34,7 @@ test('should allow that only the creator can restore', function () {
     assertSoftDeleted('questions', ['id' => $question->id]);
 });
 
-test('should only restore when the question is deleted', function () {
+it('should only restore when the question is deleted', function () {
     $userOne  = User::factory()->create();
     $userTwo  = User::factory()->create();
     $question = Question::factory()->for($userOne)->create();

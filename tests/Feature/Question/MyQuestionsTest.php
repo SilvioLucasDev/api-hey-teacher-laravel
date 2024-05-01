@@ -5,7 +5,7 @@ use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\getJson;
 
-test('should list only questions that the logged user has ben created :: published', function () {
+it('should list only questions that the logged user has ben created :: published', function () {
     $user              = User::factory()->create();
     $questionPublished = Question::factory()->for($user)->published()->create();
     $questionDraft     = Question::factory()->for($user)->draft()->create();
@@ -38,7 +38,7 @@ test('should list only questions that the logged user has ben created :: publish
     ]);
 });
 
-test('should list only questions that the logged user has ben created :: draft', function () {
+it('should list only questions that the logged user has ben created :: draft', function () {
     $user              = User::factory()->create();
     $questionPublished = Question::factory()->for($user)->published()->create();
     $questionDraft     = Question::factory()->for($user)->draft()->create();
@@ -71,7 +71,7 @@ test('should list only questions that the logged user has ben created :: draft',
     ]);
 });
 
-test('should list only questions that the logged user has ben created :: archive', function () {
+it('should list only questions that the logged user has ben created :: archive', function () {
     $user              = User::factory()->create();
     $questionPublished = Question::factory()->for($user)->published()->create();
     $questionDraft     = Question::factory()->for($user)->draft()->create();

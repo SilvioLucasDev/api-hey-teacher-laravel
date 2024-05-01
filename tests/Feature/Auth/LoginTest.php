@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Hash;
 
 use function Pest\Laravel\{assertAuthenticatedAs, postJson};
 
-test('should be able to login', function () {
+it('should be able to login', function () {
     $user = User::factory()->create(['email' => 'any@email.com', 'password' => Hash::make('password')]);
 
     postJson(route('login', [
@@ -44,7 +44,7 @@ it('should check if the email and password is not empty', function () {
     ]);
 });
 
-test('should log the new user in the system', function () {
+it('should log the new user in the system', function () {
     $user = User::factory()->create(['email' => 'any@email.com', 'password' => Hash::make('password')]);
 
     postJson(route('login', [

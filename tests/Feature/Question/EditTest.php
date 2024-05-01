@@ -5,7 +5,7 @@ use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\{assertDatabaseHas, putJson};
 
-test('should be able to update a question', function () {
+it('should be able to update a question', function () {
     $user     = User::factory()->create();
     $question = Question::factory()->create(['user_id' => $user->id]);
 
