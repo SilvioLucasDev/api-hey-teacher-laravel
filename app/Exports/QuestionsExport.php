@@ -6,7 +6,7 @@ use App\Models\Question;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\{Exportable, FromQuery};
 
-class QuestionExport implements FromQuery
+class QuestionsExport implements FromQuery
 {
     use Exportable;
 

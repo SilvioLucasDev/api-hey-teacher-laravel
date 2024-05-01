@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Question;
 
-use App\Exports\QuestionExport;
+use App\Exports\QuestionsExport;
 use App\Http\Controllers\Controller;
 
 class DownloadController extends Controller
@@ -12,6 +12,6 @@ class DownloadController extends Controller
      */
     public function __invoke()
     {
-        return (new QuestionExport())->download('questions.xlsx');
+        return (new QuestionsExport())->download('questions.xlsx');
     }
 }
