@@ -15,8 +15,11 @@ class IndexController extends Controller
      */
     public function __invoke(Request $request): ResourceCollection
     {
+        $search = $request->query('search');
+
         $questions = Question::query()
-            ->whereStatus('published')
+            ->published()
+            ->search($search)
             ->get();
 
         return QuestionResource::collection($questions);
