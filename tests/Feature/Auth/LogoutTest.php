@@ -3,9 +3,9 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-use function Pest\Laravel\{assertAuthenticatedAs, postJson};
+use function Pest\Laravel\{assertAuthenticatedAs, assertDatabaseHas, postJson};
 
-test('should be able to login', function () {
+test('should be able to logout', function () {
     $user = User::factory()->create(['email' => 'any@email.com', 'password' => Hash::make('password')]);
 
     postJson(route('login', [
