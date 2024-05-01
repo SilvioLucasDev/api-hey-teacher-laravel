@@ -21,4 +21,14 @@ class QuestionFactory extends Factory
             'status'   => 'draft',
         ];
     }
+
+    public function published(): self
+    {
+        return $this->state(fn (array $attributes) => ['status' => 'published']);
+    }
+
+    public function draft(): self
+    {
+        return $this->state(fn (array $attributes) => ['status' => 'draft']);
+    }
 }
