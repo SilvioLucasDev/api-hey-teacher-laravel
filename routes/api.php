@@ -14,22 +14,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::middleware(['guest', 'web'])->group(function () {
-    Route::post('register', Auth\RegisterController::class)->name('register');
-    Route::post('login', Auth\LoginController::class)->name('login');
+
+Route::get('user', function (Request $request) {
+    return $request->user();
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('user', function (Request $request) {
-        return $request->user();
-    });
-
-    /** Question */
-    Route::post('questions', Question\StoreController::class)->name('questions.store');
-    Route::put('questions/{question}', Question\UpdateController::class)->name('questions.update');
-    Route::delete('questions/{question}', Question\DeleteController::class)->name('questions.delete');
-    Route::delete('questions/{question}/archive', Question\ArchiveController::class)->name('questions.archive');
-    Route::put('questions/{question}/restore', Question\RestoreController::class)->name('questions.restore');
-    Route::put('questions/{question}/publish', Question\PublishController::class)->name('questions.publish');
-});
+/** Question */
+Route::post('questions', Question\StoreController::class)->name('questions.store');
+Route::put('questions/{question}', Question\UpdateController::class)->name('questions.update');
+Route::delete('questions/{question}', Question\DeleteController::class)->name('questions.delete');
+Route::delete('questions/{question}/archive', Question\ArchiveController::class)->name('questions.archive');
+Route::put('questions/{question}/restore', Question\RestoreController::class)->name('questions.restore');
+Route::put('questions/{question}/publish', Question\PublishController::class)->name('questions.publish');
